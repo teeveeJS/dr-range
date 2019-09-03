@@ -9,6 +9,14 @@ Draw and save ranges to a sqlite3 database
 * Add filters and notes to find and understand your ranges better
 * Database of ranges can be maintained through "Browse Ranges"
 
+## Usage
+`python range_db.py` to initialize the database
+`python main.py` to run RangeViewer (the main part of the app)
+
+## Dependencies
+* Sqlite3
+* Tkinter (?)
+* PIL and Ghostscript (in the future)
 
 ## TODOs
 * Postflop hand ranges and card removal effects
