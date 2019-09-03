@@ -22,6 +22,5 @@ Draw and save ranges to a sqlite3 database
 * Postflop hand ranges and card removal effects
   * Differentiate between suits postflop
 * Fractional actions
-* Keyboard shortcuts to commands
 * Add and remove actions/colors
 * Custom action colors

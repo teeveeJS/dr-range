@@ -12,9 +12,11 @@ def save_range(name, range, actions, hero_pos, villain_pos, villain_type, previo
         VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? )''', (name, json.dumps(range), json.dumps(actions), hero_pos,
         villain_pos, villain_type, previous_action, table_size, notes))
 
+    rid = cur.lastrowid
+
     conn.commit()
     conn.close()
-    return
+    return rid
 
 
 def update_range(range_id, data):

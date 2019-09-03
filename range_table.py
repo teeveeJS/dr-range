@@ -16,6 +16,8 @@ class RangeTable(tk.Frame):
 
         self.box_size = 5
 
+        self.add_keyboard_shortcuts()
+
         self.initUI()
 
 
@@ -34,8 +36,6 @@ class RangeTable(tk.Frame):
         self.listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
 
         self.populate_listbox()
-
-
 
         return
 
@@ -154,6 +154,12 @@ class RangeTable(tk.Frame):
         for r in self.ranges:
             self.listbox.insert(tk.END, str(r[0]) + " | " + r[1] + " | " + r[4] + " | " + r[5] + " | " + r[6] + " | " + r[7] + " | " + r[8] + " | " + r[9])
 
+
+    def add_keyboard_shortcuts(self):
+        self.master.bind("<Control-R>", self.refresh)
+        self.master.bind("<Control-o>", self.return_range)
+        self.master.bind("<Control-Shift-o>", self.load_new)
+        self.master.bind("<Control-q>", self.delete_range)
 
     def refresh(self):
         self.listbox.delete(0, tk.END)

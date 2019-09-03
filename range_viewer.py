@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import simpledialog
+from tkinter import messagebox
 
 from decimal import Decimal
 
@@ -17,7 +18,7 @@ class RangeViewer(tk.Frame):
         if master is None:
             master = tk.Tk()
 
-        super().__init__(master)
+        self.frame = super().__init__(master)
         self.master = master
 
         if "range_id" in kwargs:
@@ -110,6 +111,7 @@ class RangeViewer(tk.Frame):
         self.unsaved_changes = False
 
 
+        self.add_keyboard_shortcuts()
 
         self.initUI()
 
@@ -242,6 +244,17 @@ class RangeViewer(tk.Frame):
         self.master.config(menu=self.menubar)
 
 
+    def add_keyboard_shortcuts(self):
+        self.master.bind("<Control-n>", self.new_range)
+        self.master.bind("<Control-q>", self.clear_range)
+        self.master.bind("<Control-b>", self.browse_ranges)
+        self.master.bind("<Control-s>", self.save_range)
+        self.master.bind("<Control-e>", self.export_range)
+        self.master.bind("<Control-Shift-e>", self.export_png)
+
+        self.master.bind("<Control-r>", self.name_range)
+        self.master.bind("<Control-t", self.add_notes)
+
     def init_range(self):
         self.hand_range = []
         for _ in range(13):
@@ -307,24 +320,25 @@ class RangeViewer(tk.Frame):
             event.widget.configure(text=new_action_name)
 
 
-    def new_range(self):
+    def new_range(self, event):
         # same as clear_range but prompt to save any unsaved changes
 
         # ...
-        self.clear_range()
-        self.range_id = -1
+        # self.clear_range()
+        # self.range_id = -1
+        self = RangeViewer(self.master) # not sure if good practice but seems to work
 
-    def clear_range(self):
+    def clear_range(self, event):
         self.init_range()
         self.init_counts()
         self.draw_full_range()
         self.update_count_labels()
 
-    def browse_ranges(self):
+    def browse_ranges(self, event):
         br = range_table.RangeTable(tk.Tk())
         return
 
-    def save_range(self):
+    def save_range(self, event):
         actions = []
         hr = self.hand_range.copy()
         index_map = {}
@@ -337,14 +351,20 @@ class RangeViewer(tk.Frame):
             for l in range(13):
                 hr[k][l] = index_map[hr[k][l]]
 
-        range_db.save_range(self.range_name, hr, actions, self.hero_pos_var.get(),
+        self.range_id = range_db.save_range(self.range_name, hr, actions, self.hero_pos_var.get(),
             self.villain_pos_var.get(), self.villain_type_var.get(), self.previous_actions_var.get(),
             self.table_size_var.get(), self.notes)
 
-    def export_range(self):
+    def export_range(self, event):
+        if self.range_id != -1:
+            range_db.export_range(self.range_id)
+        else:
+            if messagebox("Save first", "The range must be saved before exporting. Would like to save and then export?"):
+                self.range_id = self.save_range()
+                range_db.export_range(self.range_id)
         return
 
-    def export_png(self):
+    def export_png(self, event):
         # import io
         # from PIL import Image
         #
@@ -355,7 +375,7 @@ class RangeViewer(tk.Frame):
         return
 
 
-    def name_range(self):
+    def name_range(self, event):
         new_name = simpledialog.askstring("Input", "Rename Your Range:", parent=self.master)
         if new_name != "" and not new_name is None:
             self.range_name = new_name
