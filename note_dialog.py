@@ -12,10 +12,10 @@ class NoteDialog:
         self.e.insert(tk.END, existing_notes)
         self.e.grid(row=0, column=0, columnspan=2)
 
-        b = tk.Button(self.top, text="Ok", command=self.ok)
-        b.grid(row=1, column=0, sticky=tk.W+tk.E+tk.N+tk.S, padx=20, pady=3)
-        bc = tk.Button(self.top, text="Cancel", command=self.canc)
-        bc.grid(row=1, column=1, sticky=tk.W+tk.E+tk.N+tk.S, padx=20, pady=3)
+        self.b = tk.Button(self.top, text="Ok", command=self.ok)
+        self.b.grid(row=1, column=0, sticky=tk.W+tk.E+tk.N+tk.S, padx=20, pady=3)
+        self.bc = tk.Button(self.top, text="Cancel", command=self.canc)
+        self.bc.grid(row=1, column=1, sticky=tk.W+tk.E+tk.N+tk.S, padx=20, pady=3)
     def ok(self):
         self.master.notes = self.e.get("1.0", tk.END)
 
